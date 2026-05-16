@@ -8,30 +8,32 @@ export default function BobInsightCard({
   suggestion,
 }: BobInsightCardProps) {
   return (
-    <div className="bg-white p-5 rounded-2xl shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">
-        IBM Bob Insights
-      </h2>
+    <div className="nes-container is-warning with-title">
+      <p className="title" style={{ fontSize: '0.7rem' }}>
+        <i className="nes-icon trophy is-small"></i> IBM BOB INSIGHTS
+      </p>
 
-      <div className="mb-4">
-        <h3 className="font-semibold mb-2">
-          Affected Files
+      <div style={{ marginBottom: '1rem' }}>
+        <h3 style={{ fontSize: '0.7rem', marginBottom: '0.5rem', color: '#000' }}>
+          Affected Files:
         </h3>
-
-        <ul className="list-disc pl-5">
+        <div className="nes-list is-disc" style={{ fontSize: '0.6rem' }}>
           {files.map((file, index) => (
             <li key={index}>{file}</li>
           ))}
-        </ul>
+        </div>
       </div>
 
       <div>
-        <h3 className="font-semibold mb-2">
-          Suggested Debugging Insight
+        <h3 style={{ fontSize: '0.7rem', marginBottom: '0.5rem', color: '#000' }}>
+          Debugging Insight:
         </h3>
-
-        <p>{suggestion}</p>
+        <p style={{ fontSize: '0.7rem', lineHeight: '1.6', color: '#000' }}>
+          {suggestion}
+        </p>
       </div>
     </div>
   );
 }
+
+// Made with Bob

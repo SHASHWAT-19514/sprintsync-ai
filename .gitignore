@@ -40,3 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Bob sessions and logs
+bob_sessions/
+*.md
+!README.md
+!SECURITY.md
+!AGENTS.md
+!CLAUDE.md
