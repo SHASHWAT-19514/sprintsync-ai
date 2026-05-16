@@ -46,7 +46,7 @@ SprintSync AI is a retro-styled Next.js application that uses IBM WatsonX AI to 
    ```env
    WATSONX_API_KEY=your_actual_api_key_here
    WATSONX_PROJECT_ID=your_actual_project_id_here
-   WATSONX_URL=https://us-south.ml.cloud.ibm.com/ml/v1/text/generation?version=2023-05-29
+   WATSONX_URL=enterURLhere
    ```
 
    **How to get your credentials:**
