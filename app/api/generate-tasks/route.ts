@@ -171,13 +171,15 @@ ${body.transcript}
       rawResponse: generatedText,
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("BACKEND ERROR:");
 
-    if (error.response) {
-      console.error(error.response.data);
-    } else {
+    if (error && typeof error === 'object' && 'response' in error) {
+      console.error((error as { response: { data: unknown } }).response.data);
+    } else if (error instanceof Error) {
       console.error(error.message);
+    } else {
+      console.error(error);
     }
 
     return NextResponse.json(
