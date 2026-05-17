@@ -24,6 +24,35 @@ export async function POST(req: Request) {
   try {
     // Get transcript from frontend
     const body = await req.json();
+    
+    if (!body.transcript) {
+      return NextResponse.json(
+        { error: "Transcript is required" },
+        { status: 400 }
+      );
+    }
+    
+    // Validate environment variables
+    if (!process.env.WATSONX_API_KEY) {
+      return NextResponse.json(
+        { error: "WATSONX_API_KEY is not configured" },
+        { status: 500 }
+      );
+    }
+    
+    if (!process.env.WATSONX_PROJECT_ID) {
+      return NextResponse.json(
+        { error: "WATSONX_PROJECT_ID is not configured" },
+        { status: 500 }
+      );
+    }
+    
+    if (!process.env.WATSONX_URL) {
+      return NextResponse.json(
+        { error: "WATSONX_URL is not configured" },
+        { status: 500 }
+      );
+    }
 
     // AI Prompt
     const prompt = `
@@ -91,23 +120,21 @@ ${body.transcript}
     console.log(process.env.WATSONX_PROJECT_ID);
 
     // Get IBM IAM token
-    const iamToken = await getIAMToken(
-      process.env.WATSONX_API_KEY!
-    );
+    console.log("Getting IAM token...");
+    const iamToken = await getIAMToken(process.env.WATSONX_API_KEY);
+    console.log("IAM token obtained successfully");
 
     // Call IBM WatsonX Granite Model
+    console.log("Calling WatsonX API...");
     const aiResponse = await axios.post(
-      process.env.WATSONX_URL!,
+      process.env.WATSONX_URL,
       {
         input: prompt,
-
         parameters: {
           max_new_tokens: 1000,
           temperature: 0.2,
         },
-
         model_id: "ibm/granite-3-8b-instruct",
-
         project_id: process.env.WATSONX_PROJECT_ID,
       },
       {
@@ -171,18 +198,44 @@ ${body.transcript}
       rawResponse: generatedText,
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("BACKEND ERROR:");
+    console.error(error);
 
-    if (error.response) {
-      console.error(error.response.data);
-    } else {
-      console.error(error.message);
+    if (error && typeof error === 'object' && 'response' in error) {
+      const axiosError = error as { response: { data: unknown; status: number; statusText: string } };
+      console.error("Response status:", axiosError.response.status);
+      console.error("Response data:", axiosError.response.data);
+      
+      return NextResponse.json(
+        {
+          error: "AI request failed",
+          details: axiosError.response.data,
+          status: axiosError.response.status,
+        },
+        {
+          status: 500,
+        }
+      );
+    } else if (error instanceof Error) {
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+      
+      return NextResponse.json(
+        {
+          error: "AI request failed",
+          message: error.message,
+        },
+        {
+          status: 500,
+        }
+      );
     }
 
     return NextResponse.json(
       {
         error: "AI request failed",
+        message: "Unknown error occurred",
       },
       {
         status: 500,
