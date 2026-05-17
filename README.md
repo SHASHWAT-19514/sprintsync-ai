@@ -207,8 +207,9 @@ sprintsync-ai/
 ├── HACKATHON.md                  # This file
 ├── SECURITY.md                   # Security guidelines
 └── AGENTS.md                     # Next.js version notes
+
+NOTE: bob_sessions/ - Bob IDE task sessions documenting AI-assisted development (required for hackathon, credentials are redacted)
 ```
-bob_sessions/ - Bob IDE task sessions documenting AI-assisted development (required for hackathon, credentials are redacted)
 
 
 ## 🎨 IBM WatsonX Integration Details
